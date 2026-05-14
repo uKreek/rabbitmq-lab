@@ -67,7 +67,7 @@ $errorCount = $q->getStats($q->errorQueue);
             cursor: pointer;
             transition: background 0.3s;
         }
-        button:hover { background-color: #1557b0; }
+        button:hover { background-color: #a74f84; }
         
         .footer { margin-top: 20px; text-align: center; font-size: 12px; color: #888; }
     </style>
