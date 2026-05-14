@@ -2,31 +2,99 @@
 require_once 'QueueManager.php';
 $q = new QueueManager();
 
-// Логика статистики
 $mainCount = $q->getStats($q->mainQueue);
 $errorCount = $q->getStats($q->errorQueue);
 ?>
-
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Lab 7: RabbitMQ</title>
+    <meta charset="UTF-8">
+    <title>RabbitMQ Lab Control Panel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #c55580;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            padding-top: 50px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 { font-size: 24px; margin-bottom: 20px; text-align: center; color: #781b3b; }
+        
+        .stats-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            flex: 1;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        .stat-card.main { background-color: #fbe2f4; border-color: #b091aa; }
+        .stat-card.error { background-color: #ffcbcb; border-color: #bc8b8b; }
+        
+        .stat-value { display: block; font-size: 28px; font-weight: bold; margin-top: 5px; }
+        .stat-label { font-size: 12px; text-transform: uppercase; color: #666; }
+
+        form { display: flex; flex-direction: column; gap: 10px; }
+        input[type="text"] {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus { border-color: #41b094; outline: none; }
+        
+        button {
+            background-color: #6cac9c;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #1557b0; }
+        
+        .footer { margin-top: 20px; text-align: center; font-size: 12px; color: #888; }
+    </style>
 </head>
 <body>
-    <h1>Управление задачами</h1>
+    <div class="container">
+        <h1>RabbitMQ Manager</h1>
 
-    <!-- Форма для отправки сообщения -->
-    <form action="send.php" method="POST" style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd;">
-        <input type="text" name="name" placeholder="Введите название задачи" required>
-        <button type="submit">Отправить в очередь 🚀</button>
-    </form>
+        <div class="stats-container">
+            <div class="stat-card main">
+                <span class="stat-label">В очереди</span>
+                <span class="stat-value"><?= $mainCount ?></span>
+            </div>
+            <div class="stat-card error">
+                <span class="stat-label">Ошибки</span>
+                <span class="stat-value" style="color: #d93025;"><?= $errorCount ?></span>
+            </div>
+        </div>
 
-    <div style="background: #f4f4f4; padding: 10px;">
-        <h3>📊 Статистика очередей</h3>
-        <p>Основная очередь: <b><?= $mainCount ?></b> сообщений</p>
-        <p>Очередь ошибок: <b style="color:red;"><?= $errorCount ?></b> сообщений</p>
+        <form action="send.php" method="POST">
+            <input type="text" name="name" placeholder="Название новой задачи..." required>
+            <button type="submit">Добавить в очередь 🚀</button>
+        </form>
+
+        <div class="footer">
+            Обновите страницу для актуальных данных
+        </div>
     </div>
-
-    <p><small>Обновите страницу, чтобы увидеть актуальную статистику.</small></p>
 </body>
 </html>
