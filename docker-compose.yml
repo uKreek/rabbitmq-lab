@@ -5,6 +5,7 @@ services:
     container_name: lab7_php
     volumes:
       - ./www:/var/www/html
+      - /var/www/html/vendor
     expose:
       - "9000"
     depends_on:

@@ -1,11 +1,15 @@
 <?php
-require 'vendor/autoload.php';
-require 'QueueManager.php';
+require_once 'QueueManager.php';
 
-$q = new QueueManager();
-$q->publish([
-    'name' => $_POST['name'] ?? 'Без имени',
-    'timestamp' => date('Y-m-d H:i:s')
-]);
-
-echo "✅ Сообщение отправлено в очередь!";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $q = new QueueManager();
+    $data = [
+        'name' => $_POST['name'] ?? 'Анонимная задача',
+        'timestamp' => date('Y-m-d H:i:s')
+    ];
+    
+    $q->publish($data);
+    
+    echo "✅ Сообщение '" . htmlspecialchars($data['name']) . "' отправлено!<br>";
+    echo "<a href='index.php'>Назад к статистике</a>";
+}

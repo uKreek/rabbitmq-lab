@@ -1,14 +1,17 @@
 <?php
-require 'vendor/autoload.php';
-require 'QueueManager.php';
-
+require_once 'QueueManager.php';
 $q = new QueueManager();
 
-echo "👷 Рабочий запущен (RabbitMQ)...\n";
+echo "👷 Работяга запущен...\n";
 
-$q->consume(function($data) {
-    echo "📥 Получено сообщение: " . json_encode($data) . "\n";
-    sleep(2);
-    file_put_contents('processed_rabbit.log', json_encode($data) . PHP_EOL, FILE_APPEND);
-    echo "✅ Обработано\n";
+$q->consume($q->mainQueue, function($data) {
+    echo "📥 Обработка: " . $data['name'] . "\n";
+    
+    // Имитация случайной ошибки для штрафного задания
+    if (rand(1, 3) === 1) {
+        throw new Exception("Случайный сбой обработки!");
+    }
+    
+    sleep(1);
+    echo "✅ Успех\n";
 });
